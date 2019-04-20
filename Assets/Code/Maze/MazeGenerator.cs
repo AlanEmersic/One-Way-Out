@@ -1,8 +1,9 @@
-﻿using UnityEngine;
-using TMPro;
-using MazeAlgorithms;
+﻿using MazeAlgorithms;
+using MazeProperties;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Diagnostics;
+using TMPro;
 
 [RequireComponent(typeof(Grid))]
 public class MazeGenerator : MonoBehaviour
@@ -40,6 +41,8 @@ public class MazeGenerator : MonoBehaviour
         Grid maze = RandomAlgorithm(grid, algorithm);
 
         LongestPathInMaze(maze);
+
+        ColorGenerator.Initialize(seed);
         TaskGenerator taskGenerator = gameObject.GetComponent<TaskGenerator>();
         taskGenerator.CreateTasks(maze, seed);
         TrapGenerator trapGenerator = gameObject.GetComponent<TrapGenerator>();
