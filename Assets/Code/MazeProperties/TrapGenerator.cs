@@ -18,7 +18,7 @@ namespace MazeProperties
             int min = maze.Rows / 2;
             int max = (maze.Rows + maze.Columns) / 2;
             int trapCount = random.Next(min, max);
-            print($"traps:{trapCount}");
+            //print($"traps:{trapCount}");
             string trapName = "Traps";
 
             if (transform.Find(trapName))

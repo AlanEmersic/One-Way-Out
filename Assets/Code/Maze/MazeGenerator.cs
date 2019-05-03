@@ -42,7 +42,7 @@ public class MazeGenerator : MonoBehaviour
 
         LongestPathInMaze(maze);
 
-        ColorGenerator.Initialize(seed);
+        ColorGenerator.Instance.Initialize(seed);
         TaskGenerator taskGenerator = gameObject.GetComponent<TaskGenerator>();
         taskGenerator.CreateTasks(maze, seed);
         TrapGenerator trapGenerator = gameObject.GetComponent<TrapGenerator>();

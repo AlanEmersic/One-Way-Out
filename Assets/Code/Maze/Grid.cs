@@ -109,7 +109,7 @@ public class Grid : MonoBehaviour
         string cellsName = "Cells";
 
         if (transform.Find(cellsName))
-            DestroyImmediate(transform.Find(cellsName).gameObject);
+            Destroy(transform.Find(cellsName).gameObject);
 
         Transform cellsHolder = new GameObject(cellsName).transform;
         cellsHolder.parent = transform;
@@ -117,7 +117,7 @@ public class Grid : MonoBehaviour
         string wallsName = "Walls";
 
         if (transform.Find(wallsName))
-            DestroyImmediate(transform.Find(wallsName).gameObject);
+            Destroy(transform.Find(wallsName).gameObject);
 
         Transform wallsHolder = new GameObject(wallsName).transform;
         wallsHolder.parent = transform;

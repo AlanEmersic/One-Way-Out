@@ -22,7 +22,7 @@ public class DeadEndCounts : MonoBehaviour
         int algorithmCount = System.Enum.GetNames(typeof(Algorithm)).Length;
         Dictionary<Algorithm, int> averages = new Dictionary<Algorithm, int>();
         Grid grid = gameObject.GetComponent<Grid>();
-        string file = @"C:\Alan\Unity 2018\One Way Out\Assets\DeadEnds.txt";
+        string file = @"C:\Users\Emersic\Desktop\DeadEnds.txt";
         StreamWriter sw = File.CreateText(file);
         sw.WriteLine("Dead - ends");
         print(file);
