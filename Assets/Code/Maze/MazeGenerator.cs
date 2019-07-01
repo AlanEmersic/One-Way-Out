@@ -18,12 +18,7 @@ public class MazeGenerator : MonoBehaviour
     {
         AldousBroder, BinaryTree, HuntAndKill, RecursiveBacktracker, Sidewinder,
         Wilsons, Prims, TruePrims, Kruskals, GrowingTree, RecursiveDivision, Ellers
-    }
-
-    private void Start()
-    {
-        GenerateMaze();
-    }
+    }    
 
     public void GenerateMaze()
     {
@@ -40,6 +35,8 @@ public class MazeGenerator : MonoBehaviour
         stopwatch.Start();
         Grid maze = RandomAlgorithm(grid, algorithm);
 
+        //maze.Braid();
+        //maze.GenerateMaze();
         LongestPathInMaze(maze);
 
         ColorGenerator.Instance.Initialize(seed);

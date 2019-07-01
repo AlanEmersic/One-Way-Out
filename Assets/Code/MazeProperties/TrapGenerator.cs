@@ -71,7 +71,8 @@ namespace MazeProperties
                 //Vector3 trapHeight = new Vector3(0, trapPrefabs[index].GetComponent<Renderer>().bounds.size.y, 0);
                 //GameObject obj = Instantiate(trapPrefabs[index], maze.CellTransform[cell].position + trapHeight, Quaternion.identity);
                 //obj.transform.SetParent(trapHolder);
-                maze.CellTransform[cell].GetComponent<Renderer>().material.color = Color.yellow;
+
+                //maze.CellTransform[cell].GetComponent<Renderer>().material.color = Color.yellow;
             }
         }
 
@@ -95,7 +96,8 @@ namespace MazeProperties
                 //Vector3 trapHeight = new Vector3(0, trapPrefabs[index].GetComponent<Renderer>().bounds.size.y, 0);
                 //GameObject obj = Instantiate(trapPrefabs[index], maze.CellTransform[cell].position + trapHeight, Quaternion.identity);
                 //obj.transform.SetParent(trapHolder);
-                maze.CellTransform[cell].GetComponent<Renderer>().material.color = Color.red;
+
+                //maze.CellTransform[cell].GetComponent<Renderer>().material.color = Color.red;
             }
         }
     }

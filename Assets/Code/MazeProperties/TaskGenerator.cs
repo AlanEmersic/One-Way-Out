@@ -8,9 +8,9 @@ namespace MazeProperties
         public int TaskCount { get; private set; }
         public List<Cell> TaskCells { get; private set; }
         public static TaskGenerator Instance { get; private set; }
-
+        
         private void Awake()
-        {
+        {            
             if (Instance != null && Instance != this)
                 Destroy(gameObject);
             else
@@ -41,7 +41,7 @@ namespace MazeProperties
                 if (cell != maze.Start && cell != maze.End && deadEnds.Contains(cell) && !TaskCells.Contains(cell))
                 {
                     TaskCells.Add(cell);
-                    maze.CellTransform[cell].GetComponent<Renderer>().material.color = Color.blue;
+                    //maze.CellTransform[cell].GetComponent<Renderer>().material.color = Color.blue;
                     i++;
                 }
             }

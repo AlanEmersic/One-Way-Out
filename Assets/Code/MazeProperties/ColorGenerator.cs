@@ -15,10 +15,11 @@ namespace MazeProperties
         }
 
         [SerializeField] GameObject spritePrefab;
+        [SerializeField] Colors colorsUI;
         public static ColorGenerator Instance { get; private set; }
         Queue<Colour> colorQueue;
-        Sprite[] sprites;
         Colour[] colors;
+
 
         void Awake()
         {
@@ -27,7 +28,7 @@ namespace MazeProperties
             else
                 Instance = this;
 
-            sprites = Resources.LoadAll<Sprite>("Art/Colors");
+
         }
 
         public void Initialize(int seed)
@@ -58,13 +59,13 @@ namespace MazeProperties
 
         Sprite GetColor(Colour color, GameObject obj)
         {
-            for (int i = 0; i < sprites.Length; i++)
+            for (int i = 0; i < colorsUI.sprites.Length; i++)
             {
-                string name = sprites[i].name;
+                string name = colorsUI.sprites[i].name;
                 if (Enum.TryParse(name, out Colour colour) && colour == color)
                 {
-                    obj.name = sprites[i].name;
-                    return sprites[i];
+                    obj.name = colorsUI.sprites[i].name;
+                    return colorsUI.sprites[i];
                 }
             }
             return null;
