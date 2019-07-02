@@ -1,5 +1,4 @@
 ﻿using MazeAlgorithms;
-using MazeProperties;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,10 +7,13 @@ using TMPro;
 [RequireComponent(typeof(Grid))]
 public class MazeGenerator : MonoBehaviour
 {
-    int gridSize = 10;
     [SerializeField] TextMeshProUGUI algorithmText;
     [SerializeField] TextMeshProUGUI timer;
+    [SerializeField] TaskGenerator taskGenerator;
+    [SerializeField] TrapGenerator trapGenerator;
+    [SerializeField] ColorGenerator colorGenerator;
     Algorithm algorithm;
+    int gridSize = 10;
     int seed;
 
     enum Algorithm
@@ -39,10 +41,8 @@ public class MazeGenerator : MonoBehaviour
         //maze.GenerateMaze();
         LongestPathInMaze(maze);
 
-        ColorGenerator.Instance.Initialize(seed);
-        TaskGenerator taskGenerator = gameObject.GetComponent<TaskGenerator>();
-        taskGenerator.CreateTasks(maze, seed);
-        TrapGenerator trapGenerator = gameObject.GetComponent<TrapGenerator>();
+        colorGenerator.Initialize(seed);
+        taskGenerator.CreateTasks(maze, seed);        
         trapGenerator.CreateTraps(maze, seed);
 
         stopwatch.Stop();

@@ -5,7 +5,7 @@ using UnityEngine;
 public class TrapGenerator : MonoBehaviour
 {
     [SerializeField] TaskGenerator taskGenerator;
-    [SerializeField] List<GameObject> trapPrefabs = new List<GameObject>();
+    //[SerializeField] List<GameObject> trapPrefabs;
     List<Cell> trapCells;
     Transform trapHolder;
 

@@ -15,7 +15,7 @@ public class TaskGenerator : MonoBehaviour
         int min = Mathf.RoundToInt(maze.Rows * (1.0f / 3));
         int max = Mathf.RoundToInt(maze.Rows * (2.0f / 3));
         TaskCount = random.Next(min, max);
-        //print($"Tasks: {TaskCount}");
+        
         string taskName = "Tasks";
 
         if (transform.Find(taskName))
