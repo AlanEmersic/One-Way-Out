@@ -30,7 +30,7 @@ public class Distances : Dictionary<Cell, int>
 
         while (current != root)
         {
-            foreach (var neighbor in current.Links())
+            foreach (Cell neighbor in current.Links())
             {
                 if (this[neighbor] < this[current])
                 {

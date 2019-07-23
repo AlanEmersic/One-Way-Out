@@ -2,21 +2,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Rigidbody))]
 public class CharacterMovement : MonoBehaviour
 {
     [SerializeField] Button up, down, left, right;
     [SerializeField] Grid grid;
+
     Cell currentCell;
-
-    public static CharacterMovement Instance { get; private set; }
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-            Destroy(gameObject);
-        else
-            Instance = this;
-    }
+    float speed = 20f;
+    IEnumerator currentMoveCoroutine;
+    Rigidbody rb;    
 
     enum Direction
     {
@@ -25,11 +20,13 @@ public class CharacterMovement : MonoBehaviour
 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+
         up.onClick.AddListener(() => MovementDirection(Direction.Up));
         down.onClick.AddListener(() => MovementDirection(Direction.Down));
         left.onClick.AddListener(() => MovementDirection(Direction.Left));
-        right.onClick.AddListener(() => MovementDirection(Direction.Right));
-    }    
+        right.onClick.AddListener(() => MovementDirection(Direction.Right));        
+    }
 
     public void SpawnPlayer()
     {
@@ -52,8 +49,22 @@ public class CharacterMovement : MonoBehaviour
     {
         if (!currentCell.IsLinked(cell))
             return;
-        transform.position = grid.CellTransform[cell].position;
+
+        if (currentMoveCoroutine != null)
+            StopCoroutine(currentMoveCoroutine);
+
+        currentMoveCoroutine = Move(grid.CellTransform[cell].position, speed);
+        StartCoroutine(currentMoveCoroutine);
         currentCell = cell;
+    }
+
+    IEnumerator Move(Vector3 destination, float speed)
+    {
+        while (transform.position != destination)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
+            yield return null;
+        }
     }
 }
 

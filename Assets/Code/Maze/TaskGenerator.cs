@@ -3,19 +3,21 @@ using UnityEngine;
 
 public class TaskGenerator : MonoBehaviour
 {
+    [SerializeField] TaskColors taskColors;
+
     public int TaskCount { get; private set; }
+    public Color[] TaskColorsContainer { get; private set; }
     public List<Cell> TaskCells { get; private set; }
 
     public void CreateTasks(Grid maze, int seed)
     {
         System.Random random = new System.Random(seed);
+        TaskColorsContainer = new Color[5];
         TaskCells = new List<Cell>();
         List<Cell> deadEnds = maze.DeadEnds();
 
-        int min = Mathf.RoundToInt(maze.Rows * (1.0f / 3));
-        int max = Mathf.RoundToInt(maze.Rows * (2.0f / 3));
-        TaskCount = random.Next(min, max);
-        
+        TaskCount = deadEnds.Count > 5 ? random.Next(2, 5) : random.Next(0, deadEnds.Count - 2);
+        //print($"Ends:{deadEnds.Count} tasks:{TaskCount}");
         string taskName = "Tasks";
 
         if (transform.Find(taskName))
@@ -30,7 +32,8 @@ public class TaskGenerator : MonoBehaviour
             if (cell != maze.Start && cell != maze.End && deadEnds.Contains(cell) && !TaskCells.Contains(cell))
             {
                 TaskCells.Add(cell);
-                //maze.CellTransform[cell].GetComponent<Renderer>().material.color = Color.blue;
+                TaskColorsContainer[i] = taskColors.colors[i];
+                maze.CellTransform[cell].GetComponent<Renderer>().material.color = taskColors.colors[i];
                 i++;
             }
         }
@@ -39,6 +42,5 @@ public class TaskGenerator : MonoBehaviour
     public void OnTaskCompleted()
     {
         TaskCount--;
-        print($"Tasks left: {TaskCount}");
     }
 }

@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Character", menuName = "Character")]
+[CreateAssetMenu(menuName = "Character")]
 public class Character : ScriptableObject
 {
-    public GameObject character;
+    public GameObject characterPrefab;
     public string characterName;
     public int characterCost;
     public bool isUnlocked = false;
-    public bool loadAssets = false;
-    public CharacterAsset mazeAsset = null;
+    public bool loadAssets = false;    
 }

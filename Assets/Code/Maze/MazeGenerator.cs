@@ -12,38 +12,45 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] TaskGenerator taskGenerator;
     [SerializeField] TrapGenerator trapGenerator;
     [SerializeField] ColorGenerator colorGenerator;
+
+    int gridSize = 5;
     Algorithm algorithm;
-    int gridSize = 10;
     int seed;
 
     enum Algorithm
     {
         AldousBroder, BinaryTree, HuntAndKill, RecursiveBacktracker, Sidewinder,
         Wilsons, Prims, TruePrims, Kruskals, GrowingTree, RecursiveDivision, Ellers
-    }    
+    }
 
     public void GenerateMaze()
     {
+        gridSize = Random.Range(5, 11);
         seed = Random.Range(int.MinValue, int.MaxValue);
+        print($"Grid:{gridSize}x{gridSize}");
         //seed = (int)System.DateTime.Now.Ticks;
         int algorithmCount = System.Enum.GetNames(typeof(Algorithm)).Length;
         algorithm = (Algorithm)Random.Range(0, algorithmCount);
         Stopwatch stopwatch = new Stopwatch();
         algorithmText.text = algorithm.ToString();
-
         Grid grid = gameObject.GetComponent<Grid>();
 
         grid.Initialize(gridSize, gridSize, seed);
         stopwatch.Start();
         Grid maze = RandomAlgorithm(grid, algorithm);
 
-        //maze.Braid();
-        //maze.GenerateMaze();
+        //maze.Braid();        
         LongestPathInMaze(maze);
 
-        colorGenerator.Initialize(seed);
-        taskGenerator.CreateTasks(maze, seed);        
+        taskGenerator.CreateTasks(maze, seed);
         trapGenerator.CreateTraps(maze, seed);
+        colorGenerator.Initialize(seed);
+
+        //Ray ray = new Ray(transform.position, transform.position - Camera.main.transform.position);
+        //Ray ray = Camera.main.WorldToScreenPoint(transform.position);
+        //Vector3 cameraPosition = Camera.main.WorldToScreenPoint(transform.position);
+        //print($"cam:{cameraPosition}");
+        //Camera.main.transform.position = new Vector3(0, cameraPosition.y / 2, 0);
 
         stopwatch.Stop();
         timer.text = stopwatch.ElapsedMilliseconds.ToString() + "ms";
@@ -54,7 +61,7 @@ public class MazeGenerator : MonoBehaviour
         Cell startCell = new Cell(Random.Range(0, gridSize), Random.Range(0, gridSize));
         Cell endCell = new Cell(Random.Range(0, gridSize), Random.Range(0, gridSize));
 
-        if (startCell.Row == endCell.Row && startCell.Column == endCell.Column)
+        while (startCell.Row == endCell.Row && startCell.Column == endCell.Column)
             endCell = new Cell(Random.Range(0, gridSize), Random.Range(0, gridSize));
 
         maze.Start = maze.GetCell(startCell.Row, startCell.Column);

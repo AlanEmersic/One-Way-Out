@@ -13,11 +13,11 @@ public class Grid : MonoBehaviour
     public Cell End { get; set; }
     public Distances Distances { get; set; }
     public Dictionary<Cell, Transform> CellTransform { get; private set; }
-    
-    [SerializeField] MazeColor mazeColor;
 
     [SerializeField] List<GameObject> wallPrefabs;
     [SerializeField] GameObject cellPrefab;
+    [SerializeField] MazeColors[] mazeColorsList;
+    MazeColors mazeColors;
 
     int cellSize;
     System.Random random;
@@ -27,7 +27,8 @@ public class Grid : MonoBehaviour
         Rows = rows;
         Columns = columns;
         CellTransform = new Dictionary<Cell, Transform>();
-        Camera.main.backgroundColor = mazeColor.background;
+        mazeColors = mazeColorsList[Random.Range(0, mazeColorsList.Length)];
+        Camera.main.backgroundColor = mazeColors.background;
         cellSize = (int)(cellPrefab.GetComponent<Renderer>().bounds.size.x);
         random = new System.Random(seed);
 
@@ -126,11 +127,11 @@ public class Grid : MonoBehaviour
                 CellTransform.Add(Cells[x][y], obj.transform);
 
                 if (Cells[x][y] == Start)
-                    obj.GetComponent<Renderer>().material.color = mazeColor.start;
+                    obj.GetComponent<Renderer>().material.color = mazeColors.start;
                 else if (Cells[x][y] == End)
-                    obj.GetComponent<Renderer>().material.color = mazeColor.end;
+                    obj.GetComponent<Renderer>().material.color = mazeColors.end;
                 else
-                    obj.GetComponent<Renderer>().material.color = mazeColor.cell;
+                    obj.GetComponent<Renderer>().material.color = mazeColors.cell;
             }
         }
 
@@ -139,35 +140,35 @@ public class Grid : MonoBehaviour
         int wallIndex = Random.Range(0, wallPrefabs.Count);
 
         //Walls
-        foreach (var cell in EachCell())
+        foreach (Cell cell in EachCell())
         {
             if (cell.North == null)
             {
                 Vector3 cellPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(-wallX, 0, 0);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], cellPosition, Quaternion.Euler(0, 90, 0), wallsHolder);
                 obj.name = "North";
-                obj.GetComponent<Renderer>().material.color = mazeColor.wall;
+                obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }
             if (cell.West == null)
             {
                 Vector3 cellPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(0, 0, -wallZ);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], cellPosition, Quaternion.identity, wallsHolder);
                 obj.name = "West";
-                obj.GetComponent<Renderer>().material.color = mazeColor.wall;
+                obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }
             if (!cell.IsLinked(cell.East))
             {
                 Vector3 cellPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(0, 0, wallZ);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], cellPosition, Quaternion.identity, wallsHolder);
                 obj.name = "East";
-                obj.GetComponent<Renderer>().material.color = mazeColor.wall;
+                obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }
             if (!cell.IsLinked(cell.South))
             {
                 Vector3 cellPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(wallX, 0, 0);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], cellPosition, Quaternion.Euler(0, 90, 0), wallsHolder);
                 obj.name = "South";
-                obj.GetComponent<Renderer>().material.color = mazeColor.wall;
+                obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }
         }
     }

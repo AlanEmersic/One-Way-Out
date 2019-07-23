@@ -5,14 +5,14 @@ using UnityEngine;
 public class TrapGenerator : MonoBehaviour
 {
     [SerializeField] TaskGenerator taskGenerator;
-    //[SerializeField] List<GameObject> trapPrefabs;
-    List<Cell> trapCells;
+
+    public List<Cell> TrapCells { get; private set; }
     Transform trapHolder;
 
     public void CreateTraps(Grid maze, int seed)
     {
         System.Random random = new System.Random(seed);
-        trapCells = new List<Cell>();
+        TrapCells = new List<Cell>();
 
         int min = maze.Rows / 2;
         int max = (maze.Rows + maze.Columns) / 2;
@@ -33,7 +33,7 @@ public class TrapGenerator : MonoBehaviour
     bool IsNeighborTrap(Cell cell)
     {
         foreach (Cell neighbor in cell.Neighbors)
-            if (trapCells.Contains(neighbor))
+            if (TrapCells.Contains(neighbor))
                 return true;
 
         return false;
@@ -41,7 +41,7 @@ public class TrapGenerator : MonoBehaviour
 
     bool IsCellAvailable(Cell cell)
     {
-        return !trapCells.Contains(cell) && !taskGenerator.TaskCells.Contains(cell) && !IsNeighborTrap(cell) && cell.Links().Count != 1;
+        return !TrapCells.Contains(cell) && !taskGenerator.TaskCells.Contains(cell) && !IsNeighborTrap(cell) && cell.Links().Count != 1;
     }
 
     void TrapsOnTaskPath(Grid maze, int taskCount)
@@ -64,7 +64,7 @@ public class TrapGenerator : MonoBehaviour
             }
             if (depth > 5) continue;
 
-            trapCells.Add(cell);
+            TrapCells.Add(cell);
             //int index = Random.Range(0, trapPrefabs.Count);
             //int index = 1;
             //Vector3 trapHeight = new Vector3(0, trapPrefabs[index].GetComponent<Renderer>().bounds.size.y, 0);
@@ -90,13 +90,13 @@ public class TrapGenerator : MonoBehaviour
             }
             if (depth > 5) continue;
 
-            trapCells.Add(cell);
+            TrapCells.Add(cell);
             //int index = 0;
             //Vector3 trapHeight = new Vector3(0, trapPrefabs[index].GetComponent<Renderer>().bounds.size.y, 0);
             //GameObject obj = Instantiate(trapPrefabs[index], maze.CellTransform[cell].position + trapHeight, Quaternion.identity);
             //obj.transform.SetParent(trapHolder);
 
-            //maze.CellTransform[cell].GetComponent<Renderer>().material.color = Color.red;
+            maze.CellTransform[cell].GetComponent<Renderer>().material.color = new Color(224 / 256f, 148 / 256f, 93 / 256f);
         }
     }
 }

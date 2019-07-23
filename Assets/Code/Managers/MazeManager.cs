@@ -3,10 +3,12 @@
 public class MazeManager : MonoBehaviour
 {
     [SerializeField] MazeGenerator mazeGenerator;
+    [SerializeField] CharacterMovement characterMovement;
 
-    void Start()
+    public void Start()
     {
         mazeGenerator.GenerateMaze();
+        characterMovement.SpawnPlayer();
     }
 }
 
