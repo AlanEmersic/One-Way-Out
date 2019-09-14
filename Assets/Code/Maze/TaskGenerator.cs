@@ -5,9 +5,9 @@ public class TaskGenerator : MonoBehaviour
 {
     [SerializeField] TaskColors taskColors;
 
-    public int TaskCount { get; private set; }
+    public static List<Cell> TaskCells { get; private set; }
+    public static int TaskCount { get; private set; }
     public Color[] TaskColorsContainer { get; private set; }
-    public List<Cell> TaskCells { get; private set; }
 
     public void CreateTasks(Grid maze, int seed)
     {

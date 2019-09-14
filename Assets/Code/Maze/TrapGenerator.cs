@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class TrapGenerator : MonoBehaviour
 {
-    [SerializeField] TaskGenerator taskGenerator;
-
-    public List<Cell> TrapCells { get; private set; }
+    public static List<Cell> TrapCells { get; private set; }
+    public static bool IsTasksOn { get; set; }
     Transform trapHolder;
 
     public void CreateTraps(Grid maze, int seed)
@@ -14,9 +13,7 @@ public class TrapGenerator : MonoBehaviour
         System.Random random = new System.Random(seed);
         TrapCells = new List<Cell>();
 
-        int min = maze.Rows / 2;
-        int max = (maze.Rows + maze.Columns) / 2;
-        int trapCount = random.Next(min, max);
+        int trapCount = maze.Rows;
 
         string trapName = "Traps";
 
@@ -26,8 +23,11 @@ public class TrapGenerator : MonoBehaviour
         trapHolder = new GameObject(trapName).transform;
         trapHolder.parent = transform;
 
-        TrapsOnTaskPath(maze, taskGenerator.TaskCount);
-        TrapsOnRandomPath(maze, trapCount);
+        IsTasksOn = random.Next(2) == 1;
+        if (IsTasksOn)
+            TrapsOnTaskPath(maze, TaskGenerator.TaskCount);
+
+        TrapsOnRandomPath(maze, trapCount);        
     }
 
     bool IsNeighborTrap(Cell cell)
@@ -41,7 +41,9 @@ public class TrapGenerator : MonoBehaviour
 
     bool IsCellAvailable(Cell cell)
     {
-        return !TrapCells.Contains(cell) && !taskGenerator.TaskCells.Contains(cell) && !IsNeighborTrap(cell) && cell.Links().Count != 1;
+        return IsTasksOn ?
+            !TrapCells.Contains(cell) && !TaskGenerator.TaskCells.Contains(cell) && !IsNeighborTrap(cell) && cell.Links().Count != 1
+            : !TrapCells.Contains(cell) && !IsNeighborTrap(cell) && cell.Links().Count != 1;
     }
 
     void TrapsOnTaskPath(Grid maze, int taskCount)
@@ -51,7 +53,7 @@ public class TrapGenerator : MonoBehaviour
 
         for (int i = 0; i < taskCount; i++)
         {
-            Distances newDistances = mid.Distances().PathTo(taskGenerator.TaskCells[i]);
+            Distances newDistances = mid.Distances().PathTo(TaskGenerator.TaskCells[i]);
             Cell cell = newDistances.FirstOrDefault(x => x.Value == newDistances.Maximum().Value / 2).Key;
 
             int depth = 0;

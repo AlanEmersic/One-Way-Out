@@ -27,7 +27,7 @@ public class MazeGenerator : MonoBehaviour
     {
         gridSize = Random.Range(5, 11);
         seed = Random.Range(int.MinValue, int.MaxValue);
-        print($"Grid:{gridSize}x{gridSize}");
+        //print($"Grid:{gridSize}x{gridSize}");
         //seed = (int)System.DateTime.Now.Ticks;
         int algorithmCount = System.Enum.GetNames(typeof(Algorithm)).Length;
         algorithm = (Algorithm)Random.Range(0, algorithmCount);
@@ -39,18 +39,16 @@ public class MazeGenerator : MonoBehaviour
         stopwatch.Start();
         Grid maze = RandomAlgorithm(grid, algorithm);
 
-        //maze.Braid();        
+        //maze.Braid();
+        //maze.GenerateMaze();
         LongestPathInMaze(maze);
 
         taskGenerator.CreateTasks(maze, seed);
         trapGenerator.CreateTraps(maze, seed);
-        colorGenerator.Initialize(seed);
+        //colorGenerator.Initialize(seed);
 
-        //Ray ray = new Ray(transform.position, transform.position - Camera.main.transform.position);
-        //Ray ray = Camera.main.WorldToScreenPoint(transform.position);
-        //Vector3 cameraPosition = Camera.main.WorldToScreenPoint(transform.position);
-        //print($"cam:{cameraPosition}");
-        //Camera.main.transform.position = new Vector3(0, cameraPosition.y / 2, 0);
+        Camera.main.transform.position = new Vector3(gridSize * 10, gridSize * 5, Camera.main.transform.position.z);
+        Camera.main.orthographicSize = gridSize * 5;
 
         stopwatch.Stop();
         timer.text = stopwatch.ElapsedMilliseconds.ToString() + "ms";

@@ -11,7 +11,7 @@ public class CharacterMovement : MonoBehaviour
     Cell currentCell;
     float speed = 20f;
     IEnumerator currentMoveCoroutine;
-    Rigidbody rb;    
+    Direction previousDirection;
 
     enum Direction
     {
@@ -20,28 +20,79 @@ public class CharacterMovement : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-
         up.onClick.AddListener(() => MovementDirection(Direction.Up));
         down.onClick.AddListener(() => MovementDirection(Direction.Down));
         left.onClick.AddListener(() => MovementDirection(Direction.Left));
-        right.onClick.AddListener(() => MovementDirection(Direction.Right));        
+        right.onClick.AddListener(() => MovementDirection(Direction.Right));
     }
 
     public void SpawnPlayer()
     {
         currentCell = grid.Start;
         gameObject.transform.position = grid.CellTransform[currentCell].position;
+        RotateCharacterOnStart(currentCell);
+    }
+
+    void RotateCharacterOnStart(Cell cell)
+    {
+        if (cell.IsLinked(cell.North))
+        {
+            transform.rotation = Quaternion.Euler(0, -90, 0);
+            previousDirection = Direction.Up;
+        }
+        else if (cell.IsLinked(cell.South))
+        {
+            transform.rotation = Quaternion.Euler(0, 90, 0);
+            previousDirection = Direction.Down;
+        }
+        else if (cell.IsLinked(cell.West))
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+            previousDirection = Direction.Left;
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            previousDirection = Direction.Right;
+        }
+    }
+
+    void RotateCharacter(Direction direction)
+    {
+        if (previousDirection == direction)
+            return;
+        else if (direction == Direction.Left)
+        {
+            previousDirection = Direction.Left;
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        else if (direction == Direction.Right)
+        {
+            previousDirection = Direction.Right;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (direction == Direction.Up)
+        {
+            previousDirection = Direction.Up;
+            transform.rotation = Quaternion.Euler(0, -90, 0);
+        }
+        else if (direction == Direction.Down)
+        {
+            previousDirection = Direction.Down;
+            transform.rotation = Quaternion.Euler(0, 90, 0);
+        }
     }
 
     void MovementDirection(Direction direction)
     {
+        RotateCharacter(direction);
+
         switch (direction)
         {
-            case Direction.Left: MoveToCell(currentCell.North); break;
-            case Direction.Right: MoveToCell(currentCell.South); break;
-            case Direction.Up: MoveToCell(currentCell.East); break;
-            case Direction.Down: MoveToCell(currentCell.West); break;
+            case Direction.Left: MoveToCell(currentCell.West); break;
+            case Direction.Right: MoveToCell(currentCell.East); break;
+            case Direction.Up: MoveToCell(currentCell.North); break;
+            case Direction.Down: MoveToCell(currentCell.South); break;
         }
     }
 
@@ -67,4 +118,3 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 }
-

@@ -9,6 +9,7 @@ public class MazeManager : MonoBehaviour
     {
         mazeGenerator.GenerateMaze();
         characterMovement.SpawnPlayer();
+        Timer.StartTimer();
     }
 }
 

@@ -6,8 +6,7 @@ using System.Linq;
 
 public class ColorGenerator : MonoBehaviour
 {    
-    [SerializeField] GameObject spritePrefab;
-    [SerializeField] TaskGenerator taskGenerator;
+    [SerializeField] GameObject spritePrefab;    
 
     //Queue<Colour> colorQueue;
     //Colour[] colors;
@@ -28,12 +27,12 @@ public class ColorGenerator : MonoBehaviour
         //    colors[j] = tmp;
         //}
 
-        for (int i = 0; i < taskGenerator.TaskCount; i++)
-        {
-            //colorQueue.Enqueue(colors[i]);
-            GameObject obj = Instantiate(spritePrefab, transform);
-            obj.GetComponent<Image>().color = taskGenerator.TaskColorsContainer[i];
-        }
+        //for (int i = 0; i < TaskGenerator.TaskCount; i++)
+        //{
+        //    //colorQueue.Enqueue(colors[i]);
+        //    GameObject obj = Instantiate(spritePrefab, transform);
+        //    obj.GetComponent<Image>().color = taskGenerator.TaskColorsContainer[i];
+        //}
     }    
 
     public void ColorCompleted()
