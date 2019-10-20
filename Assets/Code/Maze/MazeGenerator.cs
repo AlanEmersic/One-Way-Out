@@ -26,7 +26,7 @@ public class MazeGenerator : MonoBehaviour
 
     enum MazeType
     {
-        Grid//, Polar, Hex, Triangle
+        Grid, Polar, Hex, Triangle
     }
 
     public void GenerateMaze()
@@ -43,6 +43,8 @@ public class MazeGenerator : MonoBehaviour
         algorithmText.text = algorithm.ToString();
         Grid grid = gameObject.GetComponent<Grid>();
         PolarGrid polarGrid = gameObject.GetComponent<PolarGrid>();
+        HexGrid hexGrid = gameObject.GetComponent<HexGrid>();
+        TriangleGrid triangleGrid = gameObject.GetComponent<TriangleGrid>();
 
         if (algorithm != Algorithm.BinaryTree && algorithm != Algorithm.Ellers
             && algorithm != Algorithm.Kruskals && algorithm != Algorithm.RecursiveDivision
@@ -54,15 +56,21 @@ public class MazeGenerator : MonoBehaviour
                     RandomAlgorithm<Grid, Cell>(grid, algorithm);
                     grid.GenerateMaze();
                     break;
-                //case MazeType.Polar:
-                //    polarGrid.Initialize(gridSize, 1, seed);
-                //    RandomAlgorithm<PolarGrid, PolarCell>(polarGrid, algorithm);
-                //    polarGrid.GenerateMaze();
-                //    break;
-                    //case MazeType.Hex:
-                    //    break;
-                    //case MazeType.Triangle:
-                    //    break;
+                case MazeType.Polar:
+                    polarGrid.Initialize(gridSize, 1, seed);
+                    RandomAlgorithm<PolarGrid, PolarCell>(polarGrid, algorithm);
+                    polarGrid.GenerateMaze();
+                    break;
+                case MazeType.Hex:
+                    hexGrid.Initialize(gridSize, gridSize, seed);
+                    RandomAlgorithm<HexGrid, HexCell>(hexGrid, algorithm);
+                    hexGrid.GenerateMaze();
+                    break;
+                case MazeType.Triangle:
+                    triangleGrid.Initialize(gridSize, gridSize + 5, seed);
+                    RandomAlgorithm<TriangleGrid, TriangleCell>(triangleGrid, algorithm);
+                    triangleGrid.GenerateMaze();
+                    break;
             }
         else
         {
