@@ -15,36 +15,68 @@ public class MazeGenerator : MonoBehaviour
 
     int gridSize = 5;
     Algorithm algorithm;
+    MazeType mazeType;
     int seed;
 
     enum Algorithm
     {
         AldousBroder, BinaryTree, HuntAndKill, RecursiveBacktracker, Sidewinder,
-        Wilsons, Prims, TruePrims, Kruskals, GrowingTree, RecursiveDivision, Ellers
+        Wilsons, Houstons, Prims, TruePrims, Kruskals, GrowingTree, RecursiveDivision, Ellers
+    }
+
+    enum MazeType
+    {
+        Grid//, Polar, Hex, Triangle
     }
 
     public void GenerateMaze()
     {
-        gridSize = Random.Range(5, 11);
-        seed = Random.Range(int.MinValue, int.MaxValue);
-        //print($"Grid:{gridSize}x{gridSize}");
+        System.Random random = new System.Random(seed);
+        gridSize = random.Next(5, 11);
+        seed = random.Next(int.MinValue, int.MaxValue);
+
         //seed = (int)System.DateTime.Now.Ticks;
         int algorithmCount = System.Enum.GetNames(typeof(Algorithm)).Length;
-        algorithm = (Algorithm)Random.Range(0, algorithmCount);
+        algorithm = (Algorithm)random.Next(algorithmCount);
+        mazeType = (MazeType)random.Next(System.Enum.GetNames(typeof(MazeType)).Length);
         Stopwatch stopwatch = new Stopwatch();
         algorithmText.text = algorithm.ToString();
         Grid grid = gameObject.GetComponent<Grid>();
+        PolarGrid polarGrid = gameObject.GetComponent<PolarGrid>();
 
-        grid.Initialize(gridSize, gridSize, seed);
+        if (algorithm != Algorithm.BinaryTree && algorithm != Algorithm.Ellers
+            && algorithm != Algorithm.Kruskals && algorithm != Algorithm.RecursiveDivision
+            && algorithm != Algorithm.Sidewinder)
+            switch (mazeType)
+            {
+                case MazeType.Grid:
+                    grid.Initialize(gridSize, gridSize, seed);
+                    RandomAlgorithm<Grid, Cell>(grid, algorithm);
+                    grid.GenerateMaze();
+                    break;
+                //case MazeType.Polar:
+                //    polarGrid.Initialize(gridSize, 1, seed);
+                //    RandomAlgorithm<PolarGrid, PolarCell>(polarGrid, algorithm);
+                //    polarGrid.GenerateMaze();
+                //    break;
+                    //case MazeType.Hex:
+                    //    break;
+                    //case MazeType.Triangle:
+                    //    break;
+            }
+        else
+        {
+            grid.Initialize(gridSize, gridSize, seed);
+            RandomAlgorithm<Grid, Cell>(grid, algorithm);
+            grid.GenerateMaze();
+        }
+
         stopwatch.Start();
-        Grid maze = RandomAlgorithm(grid, algorithm);
-
         //maze.Braid();
-        //maze.GenerateMaze();
-        LongestPathInMaze(maze);
+        //LongestPathInMaze(maze);        
 
-        taskGenerator.CreateTasks(maze, seed);
-        trapGenerator.CreateTraps(maze, seed);
+        //taskGenerator.CreateTasks(maze, seed);
+        //trapGenerator.CreateTraps(maze, seed);
         //colorGenerator.Initialize(seed);
 
         Camera.main.transform.position = new Vector3(gridSize * 10, gridSize * 5, Camera.main.transform.position.z);
@@ -82,37 +114,37 @@ public class MazeGenerator : MonoBehaviour
         KeyValuePair<Cell, int> goal = newDistances.Maximum();
         maze.End = goal.Key;
         maze.Distances = newDistances.PathTo(maze.End);
-        maze.GenerateMaze();
     }
 
-    Grid RandomAlgorithm(Grid grid, Algorithm algorithm)
+    void RandomAlgorithm<G, T>(Grid grid, Algorithm algorithm) where G : Grid where T : Cell
     {
         switch (algorithm)
         {
-            case Algorithm.AldousBroder: return AldousBroder.CreateMaze(grid, seed);
+            case Algorithm.AldousBroder: AldousBroder.CreateMaze<G, T>(grid as G, seed); break;
 
-            case Algorithm.BinaryTree: return BinaryTree.CreateMaze(grid, seed);
+            case Algorithm.BinaryTree: BinaryTree.CreateMaze(grid, seed); break;
 
-            case Algorithm.HuntAndKill: return HuntAndKill.CreateMaze(grid, seed);
+            case Algorithm.HuntAndKill: HuntAndKill.CreateMaze<G, T>(grid as G, seed); break;
 
-            case Algorithm.RecursiveBacktracker: return RecursiveBacktracker.CreateMaze(grid, seed);
+            case Algorithm.RecursiveBacktracker: RecursiveBacktracker.CreateMaze<G, T>(grid as G, seed); break;
 
-            case Algorithm.Sidewinder: return Sidewinder.CreateMaze(grid, seed);
+            case Algorithm.Sidewinder: Sidewinder.CreateMaze(grid, seed); break;
 
-            case Algorithm.Wilsons: return Wilsons.CreateMaze(grid, seed);
+            case Algorithm.Wilsons: Wilsons.CreateMaze<G, T>(grid as G, seed); break;
 
-            case Algorithm.Kruskals: return Kruskals.CreateMaze(grid, seed);
+            case Algorithm.Kruskals: Kruskals.CreateMaze(grid, seed); break;
 
-            case Algorithm.Prims: return Prims.CreateMaze(grid, seed);
+            case Algorithm.Prims: Prims.CreateMaze<G, T>(grid as G, seed); break;
 
-            case Algorithm.TruePrims: return TruePrims.CreateMaze(grid, seed);
+            case Algorithm.TruePrims: TruePrims.CreateMaze<G, T>(grid as G, seed); break;
 
-            case Algorithm.GrowingTree: return GrowingTree.CreateMaze(grid, seed);
+            case Algorithm.GrowingTree: GrowingTree.CreateMaze<G, T>(grid as G, seed); break;
 
-            case Algorithm.RecursiveDivision: return RecursiveDivision.CreateMaze(grid, seed);
+            case Algorithm.RecursiveDivision: RecursiveDivision.CreateMaze(grid, seed); break;
 
-            case Algorithm.Ellers: return Ellers.CreateMaze(grid, seed);
+            case Algorithm.Ellers: Ellers.CreateMaze(grid, seed); break;
+
+            case Algorithm.Houstons: Houstons.CreateMaze<G, T>(grid as G, seed); break;
         }
-        return null;
     }
 }

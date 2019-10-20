@@ -63,32 +63,32 @@ public class DeadEndCounts : MonoBehaviour
         System.Random random = new System.Random();
         int seed = random.Next();
 
-        switch (algorithm)
-        {
-            case Algorithm.AldousBroder: return AldousBroder.CreateMaze(grid, seed);
+        //switch (algorithm)
+        //{
+        //    case Algorithm.AldousBroder: return AldousBroder.CreateMaze(grid, seed);
 
-            case Algorithm.BinaryTree: return BinaryTree.CreateMaze(grid, seed);
+        //    case Algorithm.BinaryTree: return BinaryTree.CreateMaze(grid, seed);
 
-            case Algorithm.HuntAndKill: return HuntAndKill.CreateMaze(grid, seed);
+        //    case Algorithm.HuntAndKill: return HuntAndKill.CreateMaze(grid, seed);
 
-            case Algorithm.RecursiveBacktracker: return RecursiveBacktracker.CreateMaze(grid, seed);
+        //    //case Algorithm.RecursiveBacktracker: return RecursiveBacktracker.CreateMaze(grid, seed);
 
-            case Algorithm.Sidewinder: return Sidewinder.CreateMaze(grid, seed);
+        //    case Algorithm.Sidewinder: return Sidewinder.CreateMaze(grid, seed);
 
-            case Algorithm.Wilsons: return Wilsons.CreateMaze(grid, seed);
+        //    case Algorithm.Wilsons: return Wilsons.CreateMaze(grid, seed);
 
-            case Algorithm.Kruskals: return Kruskals.CreateMaze(grid, seed);
+        //    case Algorithm.Kruskals: return Kruskals.CreateMaze(grid, seed);
 
-            case Algorithm.Prims: return Prims.CreateMaze(grid, seed);
+        //    case Algorithm.Prims: return Prims.CreateMaze(grid, seed);
 
-            case Algorithm.TruePrims: return TruePrims.CreateMaze(grid, seed);
+        //    case Algorithm.TruePrims: return TruePrims.CreateMaze(grid, seed);
 
-            case Algorithm.GrowingTree: return GrowingTree.CreateMaze(grid, seed);
+        //    case Algorithm.GrowingTree: return GrowingTree.CreateMaze(grid, seed);
 
-            case Algorithm.RecursiveDivision: return RecursiveDivision.CreateMaze(grid, seed);
+        //    case Algorithm.RecursiveDivision: return RecursiveDivision.CreateMaze(grid, seed);
 
-            case Algorithm.Ellers: return Ellers.CreateMaze(grid, seed);
-        }
+        //    case Algorithm.Ellers: return Ellers.CreateMaze(grid, seed);
+        //}
         return null;
     }
 }

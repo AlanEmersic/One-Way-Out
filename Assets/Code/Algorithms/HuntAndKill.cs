@@ -6,18 +6,18 @@ namespace MazeAlgorithms
 {
     public class HuntAndKill : MonoBehaviour
     {
-        public static Grid CreateMaze(Grid grid, int seed)
+        public static G CreateMaze<G, T>(G grid, int seed) where G : Grid where T : Cell
         {
             System.Random random = new System.Random(seed);
-            Cell current = grid.RandomCell();
+            T current = grid.RandomCell() as T;
 
             while (current != null)
             {
-                List<Cell> unvistedNeighbors = current.Neighbors.Where(e => e.Links().Count == 0).ToList();
+                List<T> unvistedNeighbors = current.Neighbors.Where(e => e.Links().Count == 0).Cast<T>().ToList();
 
                 if (unvistedNeighbors.Any())
                 {
-                    Cell neighbor = unvistedNeighbors[random.Next(0, unvistedNeighbors.Count)];
+                    T neighbor = unvistedNeighbors[random.Next(0, unvistedNeighbors.Count)];
                     current.Link(neighbor);
                     current = neighbor;
                 }
@@ -25,20 +25,21 @@ namespace MazeAlgorithms
                 {
                     current = null;
 
-                    foreach (var cell in grid.EachCell())
+                    foreach (T cell in grid.EachCell())
                     {
-                        List<Cell> vistedNeighbors = cell.Neighbors.Where(e => e.Links().Any()).ToList();
+                        List<T> vistedNeighbors = cell.Neighbors.Where(e => e.Links().Any()).Cast<T>().ToList();
 
                         if (cell.Links().Count == 0 && vistedNeighbors.Any())
                         {
                             current = cell;
-                            Cell neighbor = vistedNeighbors[random.Next(0, vistedNeighbors.Count)];
+                            T neighbor = vistedNeighbors[random.Next(0, vistedNeighbors.Count)];
                             current.Link(neighbor);
                             break;
                         }
                     }
                 }
             }
+
             return grid;
         }
     }

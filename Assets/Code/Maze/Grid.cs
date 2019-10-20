@@ -2,27 +2,27 @@
 using System.Linq;
 using UnityEngine;
 
-[DisallowMultipleComponent]
+//[DisallowMultipleComponent]
 public class Grid : MonoBehaviour
 {
-    public int Rows { get; private set; }
-    public int Columns { get; private set; }
-    public int Size { get; private set; }
-    public Cell[][] Cells { get; private set; }
+    public int Rows { get; protected set; }
+    public int Columns { get; protected set; }
+    public int Size { get; protected set; }
+    public Cell[][] Cells { get; protected set; }
     public Cell Start { get; set; }
     public Cell End { get; set; }
     public Distances Distances { get; set; }
-    public Dictionary<Cell, Transform> CellTransform { get; private set; }
+    public Dictionary<Cell, Transform> CellTransform { get; protected set; }
 
-    [SerializeField] List<GameObject> wallPrefabs;
-    [SerializeField] GameObject cellPrefab;
-    [SerializeField] MazeColors[] mazeColorsList;
-    MazeColors mazeColors;
+    [SerializeField] protected List<GameObject> wallPrefabs;
+    [SerializeField] protected GameObject cellPrefab;
+    [SerializeField] protected MazeColors[] mazeColorsList;
+    protected MazeColors mazeColors;
 
-    int cellSize;
-    System.Random random;
+    protected System.Random random;
+    protected int cellSize;
 
-    public void Initialize(int rows, int columns, int seed)
+    public virtual void Initialize(int rows, int columns, int seed)
     {
         Rows = rows;
         Columns = columns;
@@ -36,7 +36,7 @@ public class Grid : MonoBehaviour
         ConfigureCells();
     }
 
-    public Cell this[int row, int col]
+    public virtual Cell this[int row, int col]
     {
         get
         {
@@ -46,7 +46,7 @@ public class Grid : MonoBehaviour
         }
     }
 
-    void PrepareGrid()
+    protected virtual void PrepareGrid()
     {
         Size = Rows * Columns;
         Cells = new Cell[Rows][];
@@ -59,7 +59,7 @@ public class Grid : MonoBehaviour
         }
     }
 
-    void ConfigureCells()
+    protected virtual void ConfigureCells()
     {
         foreach (var cellRow in Cells)
         {
@@ -76,7 +76,7 @@ public class Grid : MonoBehaviour
         }
     }
 
-    public Cell RandomCell()
+    public virtual Cell RandomCell()
     {
         int row = random.Next(0, Rows);
         int col = random.Next(0, Columns);
@@ -99,7 +99,7 @@ public class Grid : MonoBehaviour
 
     public Cell GetCell(int row, int column) => Cells[row][column];
 
-    public void GenerateMaze()
+    public virtual void GenerateMaze()
     {
         string cellsName = "Cells";
 
@@ -144,29 +144,29 @@ public class Grid : MonoBehaviour
         {
             if (cell.North == null)
             {
-                Vector3 cellPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(-wallX, 0, 0);
-                GameObject obj = Instantiate(wallPrefabs[wallIndex], cellPosition, Quaternion.Euler(0, 90, 0), wallsHolder);
+                Vector3 wallPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(-wallX, 0, 0);
+                GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, Quaternion.Euler(0, 90, 0), wallsHolder);
                 obj.name = "North";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }
             if (cell.West == null)
             {
-                Vector3 cellPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(0, 0, -wallZ);
-                GameObject obj = Instantiate(wallPrefabs[wallIndex], cellPosition, Quaternion.identity, wallsHolder);
+                Vector3 wallPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(0, 0, -wallZ);
+                GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, Quaternion.identity, wallsHolder);
                 obj.name = "West";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }
             if (!cell.IsLinked(cell.East))
             {
-                Vector3 cellPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(0, 0, wallZ);
-                GameObject obj = Instantiate(wallPrefabs[wallIndex], cellPosition, Quaternion.identity, wallsHolder);
+                Vector3 wallPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(0, 0, wallZ);
+                GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, Quaternion.identity, wallsHolder);
                 obj.name = "East";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }
             if (!cell.IsLinked(cell.South))
             {
-                Vector3 cellPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(wallX, 0, 0);
-                GameObject obj = Instantiate(wallPrefabs[wallIndex], cellPosition, Quaternion.Euler(0, 90, 0), wallsHolder);
+                Vector3 wallPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(wallX, 0, 0);
+                GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, Quaternion.Euler(0, 90, 0), wallsHolder);
                 obj.name = "South";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }

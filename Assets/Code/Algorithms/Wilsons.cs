@@ -6,32 +6,32 @@ namespace MazeAlgorithms
 {
     public class Wilsons : MonoBehaviour
     {
-        public static Grid CreateMaze(Grid grid, int seed)
+        public static G CreateMaze<G, T>(G grid, int seed) where G : Grid where T : Cell
         {
             System.Random random = new System.Random(seed);
 
-            List<Cell> unvisted = new List<Cell>();
+            List<T> unvisted = new List<T>();
 
-            foreach (var cell in grid.EachCell())
+            foreach (T cell in grid.EachCell())
                 unvisted.Add(cell);
 
-            Cell first = unvisted[random.Next(0, unvisted.Count)];
+            T first = unvisted[random.Next(0, unvisted.Count)];
             unvisted.Remove(first);
 
             while (unvisted.Any())
             {
-                Cell cell = unvisted[random.Next(0, unvisted.Count)];
-                List<Cell> path = new List<Cell> { cell };
+                T cell = unvisted[random.Next(0, unvisted.Count)];
+                List<T> path = new List<T> { cell };
 
                 while (unvisted.Contains(cell))
                 {
-                    cell = cell.Neighbors[random.Next(0, cell.Neighbors.Count)];
+                    cell = cell.Neighbors[random.Next(0, cell.Neighbors.Count)] as T;
                     int position = path.IndexOf(cell);
 
-                    if (position >= 0)                    
-                        path = path.Take(position + 1).ToList();                    
-                    else                    
-                        path.Add(cell);                    
+                    if (position >= 0)
+                        path = path.Take(position + 1).ToList();
+                    else
+                        path.Add(cell);
                 }
 
                 for (int index = 0; index < path.Count - 1; index++)

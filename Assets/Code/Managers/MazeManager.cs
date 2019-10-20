@@ -8,7 +8,7 @@ public class MazeManager : MonoBehaviour
     public void Start()
     {
         mazeGenerator.GenerateMaze();
-        characterMovement.SpawnPlayer();
+        //characterMovement.SpawnPlayer();
         Timer.StartTimer();
     }
 }

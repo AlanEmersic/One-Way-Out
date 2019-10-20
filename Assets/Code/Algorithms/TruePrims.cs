@@ -6,26 +6,26 @@ namespace MazeAlgorithms
 {
     public class TruePrims : MonoBehaviour
     {
-        public static Grid CreateMaze(Grid grid, int seed)
+        public static G CreateMaze<G, T>(G grid, int seed) where G : Grid where T : Cell
         {
             System.Random random = new System.Random(seed);
-            Cell start = grid.RandomCell();
-            List<Cell> active = new List<Cell>() { start };
-            Dictionary<Cell, int> costs = new Dictionary<Cell, int>();
+            T start = grid.RandomCell() as T;
+            List<T> active = new List<T>() { start };
+            Dictionary<T, int> costs = new Dictionary<T, int>();
 
-            foreach (var cell in grid.EachCell())
+            foreach (T cell in grid.EachCell())
             {
                 costs[cell] = random.Next(0, 100);
             }
 
             while (active.Any())
             {
-                Cell cell = active.Aggregate((min, next) => costs[min] < costs[next] ? min : next);
-                List<Cell> availableNeighbors = cell.Neighbors.Where(e => e.Links().Count == 0).ToList();
+                T cell = active.Aggregate((min, next) => costs[min] < costs[next] ? min : next);
+                List<T> availableNeighbors = cell.Neighbors.Where(e => e.Links().Count == 0).Cast<T>().ToList();
 
                 if (availableNeighbors.Any())
                 {
-                    Cell neighbor = availableNeighbors.Aggregate((min, next) => costs[min] < costs[next] ? min : next);
+                    T neighbor = availableNeighbors.Aggregate((min, next) => costs[min] < costs[next] ? min : next);
                     cell.Link(neighbor);
                     active.Add(neighbor);
                 }

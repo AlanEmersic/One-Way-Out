@@ -6,23 +6,23 @@ namespace MazeAlgorithms
 {
     public class RecursiveBacktracker : MonoBehaviour
     {
-        public static Grid CreateMaze(Grid grid, int seed)
+        public static G CreateMaze<G, T>(G grid, int seed) where G : Grid where T : Cell
         {
             System.Random random = new System.Random(seed);
-            Cell start = grid.RandomCell();
-            Stack<Cell> stack = new Stack<Cell>();
+            T start = grid.RandomCell() as T;
+            Stack<T> stack = new Stack<T>();
             stack.Push(start);
 
             while (stack.Any())
             {
-                Cell current = stack.Peek();
-                List<Cell> neighbors = current.Neighbors.Where(e => e.Links().Count == 0).ToList();
+                T current = stack.Peek();
+                List<T> neighbors = current.Neighbors.Where(e => e.Links().Count == 0).Cast<T>().ToList();
 
                 if (neighbors.Count == 0)
                     stack.Pop();
                 else
                 {
-                    Cell neighbor = neighbors[random.Next(0, neighbors.Count)];
+                    T neighbor = neighbors[random.Next(0, neighbors.Count)];
                     current.Link(neighbor);
                     stack.Push(neighbor);
                 }

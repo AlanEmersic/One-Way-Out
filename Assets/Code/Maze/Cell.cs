@@ -3,8 +3,8 @@ using System.Linq;
 
 public class Cell
 {
-    public int Row { get; set; }
-    public int Column { get; set; }
+    public int Row { get; private set; }
+    public int Column { get; private set; }
 
     public Cell North { get; set; }
     public Cell South { get; set; }
@@ -50,7 +50,7 @@ public class Cell
         return links.ContainsKey(cell);
     }
 
-    public List<Cell> Neighbors
+    public virtual List<Cell> Neighbors
     {
         get
         {
