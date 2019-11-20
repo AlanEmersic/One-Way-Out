@@ -38,7 +38,7 @@ public class MazeGenerator : MonoBehaviour
         //seed = (int)System.DateTime.Now.Ticks;
         int algorithmCount = System.Enum.GetNames(typeof(Algorithm)).Length;
         algorithm = (Algorithm)random.Next(algorithmCount);
-        mazeType = (MazeType)random.Next(System.Enum.GetNames(typeof(MazeType)).Length);
+        mazeType = (MazeType)random.Next(System.Enum.GetNames(typeof(MazeType)).Length);        
         Stopwatch stopwatch = new Stopwatch();
         algorithmText.text = algorithm.ToString();
         Grid grid = gameObject.GetComponent<Grid>();
@@ -87,8 +87,8 @@ public class MazeGenerator : MonoBehaviour
         //trapGenerator.CreateTraps(maze, seed);
         //colorGenerator.Initialize(seed);
 
-        Camera.main.transform.position = new Vector3(gridSize * 10, gridSize * 5, Camera.main.transform.position.z);
-        Camera.main.orthographicSize = gridSize * 5;
+        //Camera.main.transform.position = new Vector3(gridSize * 10, gridSize * 5, Camera.main.transform.position.z);
+        //Camera.main.orthographicSize = gridSize * 5;
 
         stopwatch.Stop();
         timer.text = stopwatch.ElapsedMilliseconds.ToString() + "ms";

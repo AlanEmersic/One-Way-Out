@@ -120,7 +120,7 @@ public class HexGrid : Grid
 
                 Vector3 wallPosition = (a + b) / 2;
                 Vector3 direction = (b - a) / wallPosition.magnitude;
-                Quaternion wallRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "SouthWest";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
@@ -133,7 +133,7 @@ public class HexGrid : Grid
 
                 Vector3 wallPosition = (a + b) / 2;
                 Vector3 direction = (b - a) / wallPosition.magnitude;
-                Quaternion wallRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "NorthWest";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
@@ -146,7 +146,7 @@ public class HexGrid : Grid
 
                 Vector3 wallPosition = (a + b) / 2;
                 Vector3 direction = (b - a) / wallPosition.magnitude;
-                Quaternion wallRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "North";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
@@ -160,7 +160,7 @@ public class HexGrid : Grid
 
                 Vector3 wallPosition = (a + b) / 2;
                 Vector3 direction = (b - a) / wallPosition.magnitude;
-                Quaternion wallRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "NorthEast";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
@@ -173,7 +173,7 @@ public class HexGrid : Grid
 
                 Vector3 wallPosition = (a + b) / 2;
                 Vector3 direction = (b - a) / wallPosition.magnitude;
-                Quaternion wallRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "SouthEast";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
@@ -186,7 +186,7 @@ public class HexGrid : Grid
 
                 Vector3 wallPosition = (a + b) / 2;
                 Vector3 direction = (b - a) / wallPosition.magnitude;
-                Quaternion wallRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "South";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;

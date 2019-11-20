@@ -104,22 +104,22 @@ public class PolarGrid : Grid
         int center = groundSize / 2;
         cellsHolder.transform.position = new Vector3(center, 0, center);
         //Cells
-        for (int x = 0; x < Rows * 2; x++)
-        {
-            for (int y = 0; y < Rows * 2; y++)
-            {
-                GameObject obj = Instantiate(cellPrefab, new Vector3(x, 0, y) * cellSize, Quaternion.identity, cellsHolder);
-                obj.name = obj.transform.position.ToString();
-                //CellTransform.Add(Cells[x][y], obj.transform);
+        //for (int x = 0; x < Rows * 2; x++)
+        //{
+        //    for (int y = 0; y < Rows * 2; y++)
+        //    {
+        //        GameObject obj = Instantiate(cellPrefab, new Vector3(x, 0, y) * cellSize, Quaternion.identity, cellsHolder);
+        //        obj.name = obj.transform.position.ToString();
+        //        //CellTransform.Add(Cells[x][y], obj.transform);
 
-                //if (Cells[x][y] == Start)
-                //    obj.GetComponent<Renderer>().material.color = mazeColors.start;
-                //else if (Cells[x][y] == End)
-                //    obj.GetComponent<Renderer>().material.color = mazeColors.end;
-                //else
-                //    obj.GetComponent<Renderer>().material.color = mazeColors.cell;
-            }
-        }
+        //        //if (Cells[x][y] == Start)
+        //        //    obj.GetComponent<Renderer>().material.color = mazeColors.start;
+        //        //else if (Cells[x][y] == End)
+        //        //    obj.GetComponent<Renderer>().material.color = mazeColors.end;
+        //        //else
+        //        //    obj.GetComponent<Renderer>().material.color = mazeColors.cell;
+        //    }
+        //}
         //int wallX = (int)(cellPrefab.GetComponent<Renderer>().bounds.size.x / 2);
         //int wallZ = (int)(cellPrefab.GetComponent<Renderer>().bounds.size.z / 2);
         int wallIndex = Random.Range(0, wallPrefabs.Count);
@@ -152,7 +152,7 @@ public class PolarGrid : Grid
                 //Debug.DrawLine(a, c, Color.green, float.MaxValue);
                 Vector3 wallPosition = (c + a) / 2;
                 Vector3 direction = (c - a) / wallPosition.magnitude;
-                Quaternion wallRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "Inward";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
@@ -165,19 +165,19 @@ public class PolarGrid : Grid
                 //Debug.DrawLine(c, d, Color.green, float.MaxValue);
                 Vector3 wallPosition = (d + c) / 2;
                 Vector3 direction = (d - c) / wallPosition.magnitude;
-                Quaternion wallRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0); ;
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "CW";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }
         }
         //graphics.DrawEllipse(wall, center - Rows * cellSize, center - Rows * cellSize, Rows * 2 * cellSize, Rows * 2 * cellSize);               
-        float angle = 360f / Size;        
-        float radius = Rows * cellSize;        
+        float angle = 360f / Size;
+        float radius = Rows * cellSize - cellSize / 2;
         for (int i = 0; i < Size; i++)
         {
             Quaternion rotation = Quaternion.AngleAxis(i * angle, Vector3.up);
-            Vector3 direction = rotation * Vector3.forward;
+            Vector3 direction = rotation * Vector3.right;
             Vector3 position = new Vector3(center, 0, center) + (direction * radius);
             GameObject obj = Instantiate(wallPrefabs[wallIndex], position, rotation, wallsHolder);
             obj.name = "Circle";

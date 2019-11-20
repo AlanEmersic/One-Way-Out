@@ -59,9 +59,6 @@ public class TriangleGrid : Grid
         float halfWidth = cellSize / 2.0f;
         float halfHeight = height / 2.0f;
 
-        //int imgWidth = (int)(cellSize * (Columns + 1) / 2.0f);
-        //int imgHeight = (int)(height * Rows);
-
         int wallIndex = Random.Range(0, wallPrefabs.Count);
 
         foreach (TriangleCell cell in EachCell())
@@ -106,7 +103,7 @@ public class TriangleGrid : Grid
 
                 Vector3 wallPosition = (a + b) / 2;
                 Vector3 direction = (b - a) / wallPosition.magnitude;
-                Quaternion wallRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "West";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
@@ -120,7 +117,7 @@ public class TriangleGrid : Grid
 
                 Vector3 wallPosition = (a + b) / 2;
                 Vector3 direction = (b - a) / wallPosition.magnitude;
-                Quaternion wallRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "East";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
@@ -137,7 +134,7 @@ public class TriangleGrid : Grid
 
                 Vector3 wallPosition = (a + b) / 2;
                 Vector3 direction = (b - a) / wallPosition.magnitude;
-                Quaternion wallRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
                 GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "South";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;

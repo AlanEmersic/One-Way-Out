@@ -2,7 +2,6 @@
 using System.Linq;
 using UnityEngine;
 
-//[DisallowMultipleComponent]
 public class Grid : MonoBehaviour
 {
     public int Rows { get; protected set; }
@@ -115,58 +114,83 @@ public class Grid : MonoBehaviour
             Destroy(transform.Find(wallsName).gameObject);
 
         Transform wallsHolder = new GameObject(wallsName).transform;
-        wallsHolder.parent = transform;
-
-        //Cells
-        for (int x = 0; x < Rows; x++)
-        {
-            for (int y = 0; y < Columns; y++)
-            {
-                GameObject obj = Instantiate(cellPrefab, new Vector3(x, 0, y) * cellSize, Quaternion.identity, cellsHolder);
-                obj.name = obj.transform.position.ToString();
-                CellTransform.Add(Cells[x][y], obj.transform);
-
-                if (Cells[x][y] == Start)
-                    obj.GetComponent<Renderer>().material.color = mazeColors.start;
-                else if (Cells[x][y] == End)
-                    obj.GetComponent<Renderer>().material.color = mazeColors.end;
-                else
-                    obj.GetComponent<Renderer>().material.color = mazeColors.cell;
-            }
-        }
-
-        int wallX = (int)(cellPrefab.GetComponent<Renderer>().bounds.size.x / 2);
-        int wallZ = (int)(cellPrefab.GetComponent<Renderer>().bounds.size.z / 2);
+        wallsHolder.parent = transform;       
+        
         int wallIndex = Random.Range(0, wallPrefabs.Count);
-
-        //Walls
+        
         foreach (Cell cell in EachCell())
         {
+            int x1 = cell.Column * cellSize;
+            int y1 = cell.Row * cellSize;
+            int x2 = (cell.Column + 1) * cellSize;
+            int y2 = (cell.Row + 1) * cellSize;
+
+            Vector3 cellPosition = (new Vector3(x1, 0, y1) + new Vector3(x2, 0, y2)) / 2;
+            GameObject objCell = Instantiate(cellPrefab, cellPosition, Quaternion.identity, cellsHolder);
+            objCell.name = objCell.transform.position.ToString();
+            CellTransform.Add(Cells[cell.Row][cell.Column], objCell.transform);
+
+            if (Cells[cell.Row][cell.Column] == Start)
+                objCell.GetComponent<Renderer>().material.color = mazeColors.start;
+            else if (Cells[cell.Row][cell.Column] == End)
+                objCell.GetComponent<Renderer>().material.color = mazeColors.end;
+            else
+                objCell.GetComponent<Renderer>().material.color = mazeColors.cell;
+
             if (cell.North == null)
             {
-                Vector3 wallPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(-wallX, 0, 0);
-                GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, Quaternion.Euler(0, 90, 0), wallsHolder);
+                //graphics.DrawLine(wall, x1, y1, x2, y1);
+                Vector3 a = new Vector3(x1, 0, y1);
+                Vector3 b = new Vector3(x2, 0, y1);
+
+                Vector3 wallPosition = (a + b) / 2;
+                Vector3 direction = (b - a) / wallPosition.magnitude;
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
+                GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
+                //Vector3 wallPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(-wallX, 0, 0);
+                //GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, Quaternion.Euler(0, 90, 0), wallsHolder);
                 obj.name = "North";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }
             if (cell.West == null)
             {
-                Vector3 wallPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(0, 0, -wallZ);
-                GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, Quaternion.identity, wallsHolder);
+                //graphics.DrawLine(wall, x1, y1, x1, y2);
+                Vector3 a = new Vector3(x1, 0, y1);
+                Vector3 b = new Vector3(x1, 0, y2);
+
+                Vector3 wallPosition = (a + b) / 2;
+                Vector3 direction = (b - a) / wallPosition.magnitude;
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
+                //Vector3 wallPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(0, 0, -wallZ);
+                GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "West";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }
             if (!cell.IsLinked(cell.East))
             {
-                Vector3 wallPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(0, 0, wallZ);
-                GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, Quaternion.identity, wallsHolder);
+                //graphics.DrawLine(wall, x2, y1, x2, y2);
+                Vector3 a = new Vector3(x2, 0, y1);
+                Vector3 b = new Vector3(x2, 0, y2);
+
+                Vector3 wallPosition = (a + b) / 2;
+                Vector3 direction = (b - a) / wallPosition.magnitude;
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
+                //Vector3 wallPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(0, 0, wallZ);
+                GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "East";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }
             if (!cell.IsLinked(cell.South))
             {
-                Vector3 wallPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(wallX, 0, 0);
-                GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, Quaternion.Euler(0, 90, 0), wallsHolder);
+                //graphics.DrawLine(wall, x1, y2, x2, y2);
+                Vector3 a = new Vector3(x1, 0, y2);
+                Vector3 b = new Vector3(x2, 0, y2);
+
+                Vector3 wallPosition = (a + b) / 2;
+                Vector3 direction = (b - a) / wallPosition.magnitude;
+                Quaternion wallRotation = Quaternion.LookRotation(direction);
+                //Vector3 wallPosition = new Vector3(CellTransform[cell].position.x, 0, CellTransform[cell].position.z) + new Vector3(wallX, 0, 0);
+                GameObject obj = Instantiate(wallPrefabs[wallIndex], wallPosition, wallRotation, wallsHolder);
                 obj.name = "South";
                 obj.GetComponent<Renderer>().material.color = mazeColors.wall;
             }
